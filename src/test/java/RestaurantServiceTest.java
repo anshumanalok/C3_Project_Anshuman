@@ -69,7 +69,7 @@ class RestaurantServiceTest {
     }
     //<<<<<<<<<<<<<<<<<<<<ADMIN: ADDING & REMOVING RESTAURANTS>>>>>>>>>>>>>>>>>>>>>>>>>>
     @Test
-    public void getOrderValue_should_throw_exception_when_the_given_item_name_doesnt_exist_in_menu() throws itemNotFoundException {
+    public void getOrderValue_should_throw_exception_when_the_given_item_name_doesnt_exist_in_menu() throws itemNotFoundException, restaurantNotFoundException {
         restaurant.addToMenu("Sweet corn soup",119);
         restaurant.addToMenu("Vegetable lasagne", 269);
 
@@ -82,7 +82,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    public void getOrderValue_should_throw_exception_when_the_given_restaurant_name_doesnt_exist() throws itemNotFoundException {
+    public void getOrderValue_should_throw_exception_when_the_given_restaurant_name_doesnt_exist() throws itemNotFoundException, restaurantNotFoundException {
         restaurant.addToMenu("Sweet corn soup",119);
         restaurant.addToMenu("Vegetable lasagne", 269);
 
@@ -92,5 +92,20 @@ class RestaurantServiceTest {
 
         assertThrows(restaurantNotFoundException.class,()->service.getOrderValue(items,"Chick and Fish"));
 
+    }
+
+    @Test
+    public void getOrderValue_should_return_correct_cost_when_both_parameters_are_correct() throws itemNotFoundException, restaurantNotFoundException {
+        int priceForItem1 = 119;
+        int priceForItem2 = 269;
+        int totalPrice = priceForItem1+priceForItem2;
+        restaurant.addToMenu("Sweet corn soup",priceForItem1);
+        restaurant.addToMenu("Vegetable lasagne", priceForItem2);
+
+        List<String> items = new ArrayList<String>();
+        items.add("Sweet corn soup");
+        items.add("Vegetable lasagne");
+
+        assertEquals(totalPrice,service.getOrderValue(items,restaurant.getName()));
     }
 }

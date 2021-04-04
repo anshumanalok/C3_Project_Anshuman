@@ -30,4 +30,17 @@ public class RestaurantService {
     public List<Restaurant> getRestaurants() {
         return restaurants;
     }
+
+    public int getOrderValue(List<String> itemNames,String restaurantName) throws itemNotFoundException, restaurantNotFoundException {
+        Restaurant restaurant = findRestaurantByName(restaurantName);
+        int cost = 0;
+        for(String item: itemNames){
+            if(restaurant.findItemByName(item) == null){
+                throw new itemNotFoundException(item);
+            }else{
+                cost = cost + restaurant.findItemByName(item).getPrice();
+            }
+        }
+        return cost;
+    }
 }
