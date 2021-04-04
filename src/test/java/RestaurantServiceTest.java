@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.*;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -66,4 +68,29 @@ class RestaurantServiceTest {
         assertEquals(initialNumberOfRestaurants + 1,service.getRestaurants().size());
     }
     //<<<<<<<<<<<<<<<<<<<<ADMIN: ADDING & REMOVING RESTAURANTS>>>>>>>>>>>>>>>>>>>>>>>>>>
+    @Test
+    public void getOrderValue_should_throw_exception_when_the_given_item_name_doesnt_exist_in_menu() throws itemNotFoundException {
+        restaurant.addToMenu("Sweet corn soup",119);
+        restaurant.addToMenu("Vegetable lasagne", 269);
+
+        List<String> items = new ArrayList<String>();
+        items.add("Sweet corn soup");
+        items.add("Chicken");
+
+        assertThrows(itemNotFoundException.class,()->service.getOrderValue(items,restaurant.getName()));
+
+    }
+
+    @Test
+    public void getOrderValue_should_throw_exception_when_the_given_restaurant_name_doesnt_exist() throws itemNotFoundException {
+        restaurant.addToMenu("Sweet corn soup",119);
+        restaurant.addToMenu("Vegetable lasagne", 269);
+
+        List<String> items = new ArrayList<String>();
+        items.add("Sweet corn soup");
+        items.add("Vegetable lasagne");
+
+        assertThrows(restaurantNotFoundException.class,()->service.getOrderValue(items,"Chick and Fish"));
+
+    }
 }
